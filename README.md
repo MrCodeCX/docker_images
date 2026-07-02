@@ -1,141 +1,110 @@
-### DOCKER IMAGES
+# Docker Images
 
-Imagenes de Docker que suelo usar cuando trabajo con contenedores.
+Development container images I use daily, each based on a common OS/runtime with `zsh` + `oh-my-zsh` preconfigured for a faster, autocomplete-friendly shell.
 
-Encuentro que zsh mejora mi productividad, sobre todo con los plugins de oh-my-zsh para autocompletado e intellisence. Es por ello que casi siempre incluyo en los contenedores un **setup script** que se encarga de instalarlo con todas mis configuraciones personales.
+## Images
 
----
+| Image | Base |
+|---|---|
+| `alpine-dev` | `alpine:latest` |
+| `arch-dev` | `archlinux:latest` |
+| `node-dev` | `node:24` |
+| `pytorch-dev` | `pytorch/pytorch:2.9.1-cuda12.8-cudnn9-runtime` |
+| `ros-dev` | `ros:jazzy-ros-base` |
+| `ubuntu-dev` | `ubuntu:noble` |
 
-#### INSTALLATION
+Each image includes a `setup_zsh_<base>.sh` script (see `scripts/`) that installs and configures `oh-my-zsh` with the following plugins:
 
----
+- `git`, `zsh-autosuggestions`, `zsh-completions`, `fzf-tab`
 
-Para instalar docker-cli, revisar la seccion "Install using the apt repository":
+Default theme is `af-magic`. To change it, edit `ARG ZSH_THEME` in the target Dockerfile before building.
 
-- https://docs.docker.com/engine/install/ubuntu/
+## Installation
 
-Para usar docker desde $USER sin permisos de root, ejecutar:
+Install the Docker CLI following the ["Install using the apt repository"](https://docs.docker.com/engine/install/ubuntu/) section of the official docs.
 
-```shell
-sudo groupadd docker             # Crea el grupo docker
-sudo usermod -aG docker $USER    # Agrega el usuario al grupo docker
-```
-
-Para usar docker con VSCODE, instalar las extensiones:
-
-- **CONTAINER TOOLS**: Intellisence en DockerFile, y gui de administracion.
-
-- **DEV CONTAINERS**: VSCode remoto, extensiones separadas, etc.
-
----
-
-#### IMPORTANT CONTAINER SETTINGS
-
----
-
-#### Para dar Acceso a Interfaz Grafica (X11)
+To run Docker as a non-root user:
 
 ```shell
-docker create -i -t \
--e DISPLAY=$DISPLAY \
--v /tmp/.X11-unix:/tmp/.X11-unix \
---name <name> <image>
+sudo groupadd docker
+sudo usermod -aG docker $USER
 ```
 
-Darle permisos a docker sobre xhost (debe hacerse cada vez que se cierre la sesion del host):
+For VS Code integration, install:
+
+- **Container Tools** — Dockerfile intellisense and management GUI.
+- **Dev Containers** — remote development inside containers.
+
+## Building an Image
 
 ```shell
-xhost +local:docker   # agregar docker
-xhost -local:docker   # quitar docker
+docker build -t <user>/<image>:latest ./<image>
 ```
 
----
+## Container Runtime Options
 
-#### Para dar Acceso a GPU (Normal)
+**GPU access**
+
+```shell
+docker create -i -t --gpus all --name <name> <image>
+```
+
+**Full GPU access (compute + OpenGL rendering, e.g. Gazebo)**
 
 ```shell
 docker create -i -t \
---gpus all \
---name <name> <image>
-```
-
----
-
-#### Para dar Acceso Completo a GPU (compute, graphics, opengl, etc)
-
-- **Variables a exportar durante la creacion del contenedor**: 
-  
-  Normalmente le otorga a los contenedores con acceso a gpu capacidades de computo y utilidad, pero, si se desa usar aplicaciones que usen renderizado grafico (opengl) como gazebo, etc, para ello es:
-  
-  - **-e NVIDIA_DRIVER_CAPABILITIES=all**
-
-- **Variables a exportar en la sesion (sourcear a .zshrc)**: 
-  
-  - Desde un host con grafica integrada la libreria de renderizado puede acabar usando la grafica integrada en vez de la dedicada, para ello se especifica que se use la grafica nvidia con:
-  
-  ```shell
-  echo "export __NV_PRIME_RENDER_OFFLOAD=1" >> "${HOMER}/.zshrc"
-  ```
-  
-  - Para especificarle a opengl que use la grafica nvidia:
-  
-  ```shell
-  echo "export __GLX_VENDOR_LIBRARY_NAME=nvidia" >> "${HOMER}/.zshrc"
-  ```
-
-- **Resumen**
-  
-  Crear el contenedor con:
-  
-  ```shell
-  docker create -i -t \
   --gpus all \
   -e NVIDIA_DRIVER_CAPABILITIES=all \
   --name <name> <image>
-  ```
-  
-  Una vez creado ejecutar:
-  
-  ```shell
-  echo "export __NV_PRIME_RENDER_OFFLOAD=1" >> "${HOME}/.zshrc"
-  echo "export __GLX_VENDOR_LIBRARY_NAME=nvidia" >> "${HOME}/.zshrc"
-  ```
-
----
-
-#### Para Crear un Volumen Personalizado
-
-```shell
-docker create -i -t \
--v <src>:/workspace \
---name <name> <image>
 ```
 
----
-
-#### Para una Configuracion General Completa de Permisos (Interfaz Grafica, Acceso Completo a GPU, Volumen Personalizado)
-
-Crear contenedor:
-
-```shell
-docker create -i -t \
---gpus all \
--e NVIDIA_DRIVER_CAPABILITIES=all \
--e DISPLAY=$DISPLAY \
--v /tmp/.X11-unix:/tmp/.X11-unix \
--v <src>:/workspace \
---name <name> <image>
-```
-
-Una vez creado ejecutar:
+On hybrid-graphics hosts, force the NVIDIA GPU for rendering by adding to `~/.zshrc`:
 
 ```shell
 echo "export __NV_PRIME_RENDER_OFFLOAD=1" >> "${HOME}/.zshrc"
 echo "export __GLX_VENDOR_LIBRARY_NAME=nvidia" >> "${HOME}/.zshrc"
 ```
 
-Darle permisos a docker sobre xhost (debe hacerse cada vez que se cierre la sesion del host):
+**X11 (GUI) access**
 
 ```shell
+docker create -i -t \
+  -e DISPLAY=$DISPLAY \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --name <name> <image>
+```
+
+Grant Docker access to the X server (required after every host session restart):
+
+```shell
+xhost +local:docker   # grant
+xhost -local:docker   # revoke
+```
+
+**Custom volume**
+
+```shell
+docker create -i -t -v <src>:/workspace --name <name> <image>
+```
+
+**Full setup (GPU + X11 + volume)**
+
+```shell
+docker create -i -t \
+  --gpus all \
+  -e NVIDIA_DRIVER_CAPABILITIES=all \
+  -e DISPLAY=$DISPLAY \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -v <src>:/workspace \
+  --name <name> <image>
+```
+
+```shell
+echo "export __NV_PRIME_RENDER_OFFLOAD=1" >> "${HOME}/.zshrc"
+echo "export __GLX_VENDOR_LIBRARY_NAME=nvidia" >> "${HOME}/.zshrc"
 xhost +local:docker
 ```
+
+## License
+
+See [LICENSE](./LICENSE).
