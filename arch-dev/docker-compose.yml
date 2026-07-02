@@ -3,7 +3,7 @@ services:
     build:
       context: ..
       dockerfile: arch-dev/Dockerfile
-    image: arch-dev:latest
+    image: mrcodecx/arch-dev:latest
     container_name: arch-dev
     stdin_open: true
     tty: true
