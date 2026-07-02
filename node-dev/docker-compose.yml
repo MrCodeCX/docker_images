@@ -1,0 +1,16 @@
+services:
+  node-dev:
+    build:
+      context: ..
+      dockerfile: node-dev/Dockerfile
+    image: mrcodecx/node-dev:24
+    container_name: node-dev
+    stdin_open: true
+    tty: true
+    ports:
+      - 3000:3000
+    volumes:
+      - ${WORKSPACE}:/workspace
+      - ${WORKSPACE}/.claude:/home/node/.claude
+      - ${WORKSPACE}/.claude.json:/home/node/.claude.json
+      - ${WORKSPACE}/.codex:/home/node/.codex

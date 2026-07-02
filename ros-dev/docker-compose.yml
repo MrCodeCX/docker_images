@@ -1,0 +1,21 @@
+services:
+  ros-dev:
+    build:
+      context: ..
+      dockerfile: ros-dev/Dockerfile
+    image: mrcodecx/ros-dev:jazzy
+    container_name: ros-dev
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - ${WORKSPACE}:/workspace
+      - /tmp/.X11-unix:/tmp/.X11-unix

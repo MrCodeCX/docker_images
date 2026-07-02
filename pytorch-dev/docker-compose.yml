@@ -1,0 +1,26 @@
+services:
+  pytorch-dev:
+    build:
+      context: ..
+      dockerfile: pytorch-dev/Dockerfile
+    image: mrcodecx/pytorch-dev:2.9.1-cuda12.8-cudnn9-runtime
+    container_name: pytorch-dev
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISPLAY=${DISPLAY}
+      - __NV_PRIME_RENDER_OFFLOAD=1
+      - __GLX_VENDOR_LIBRARY_NAME=nvidia
+    volumes:
+      - ${WORKSPACE}:/workspace
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${WORKSPACE}/.claude:/home/dev/.claude
+      - ${WORKSPACE}/.claude.json:/home/dev/.claude.json
+      - ${WORKSPACE}/.codex:/home/dev/.codex
