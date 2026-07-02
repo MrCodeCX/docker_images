@@ -16,6 +16,11 @@ services:
     environment:
       - NVIDIA_DRIVER_CAPABILITIES=all
       - DISPLAY=${DISPLAY}
+      - __NV_PRIME_RENDER_OFFLOAD=1
+      - __GLX_VENDOR_LIBRARY_NAME=nvidia
     volumes:
       - ${WORKSPACE}:/workspace
       - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${WORKSPACE}/.claude:/home/dev/.claude
+      - ${WORKSPACE}/.claude.json:/home/dev/.claude.json
+      - ${WORKSPACE}/.codex:/home/dev/.codex

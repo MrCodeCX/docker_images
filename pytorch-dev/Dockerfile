@@ -5,7 +5,7 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 # Packages + sudo setup + create user (dev)
 RUN apt-get update && apt-get install -y --no-install-recommends sudo zsh git fzf wget nano curl && \
     rm -rf /var/lib/apt/lists/* && \
-    useradd -m -u 1000 -s /bin/zsh dev && \
+    useradd -m -u 1000 dev && \
     echo "dev ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER dev

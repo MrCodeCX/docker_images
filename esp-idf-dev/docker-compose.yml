@@ -1,0 +1,16 @@
+services:
+  esp-idf-dev:
+    build:
+      context: ..
+      dockerfile: esp-idf-dev/Dockerfile
+    image: mrcodecx/esp-idf-dev:release-v6.0
+    container_name: esp-idf-dev
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - /dev:/dev
+      - ${WORKSPACE}:/workspace
+      - ${WORKSPACE}/.claude:/home/ubuntu/.claude
+      - ${WORKSPACE}/.claude.json:/home/ubuntu/.claude.json
+      - ${WORKSPACE}/.codex:/home/ubuntu/.codex
