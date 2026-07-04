@@ -1,10 +1,8 @@
 node-dev/
-ubuntu-dev/
+esp-idf-dev/
 pytorch-dev/
 ros-dev/
-alpine-dev/
 arch-dev/
 .git/
 README.md
-README_ZSH.md
 LICENSE
