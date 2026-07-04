@@ -18,9 +18,11 @@ services:
       - DISPLAY=${DISPLAY}
       - __NV_PRIME_RENDER_OFFLOAD=1
       - __GLX_VENDOR_LIBRARY_NAME=nvidia
+      - CODEX_HOME=${CONTAINER_HOME}/.codex-data
     volumes:
       - ${WORKSPACE}:/workspace
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - ${WORKSPACE}/.claude:/home/dev/.claude
-      - ${WORKSPACE}/.claude.json:/home/dev/.claude.json
-      - ${WORKSPACE}/.codex:/home/dev/.codex
+      - ${WORKSPACE}/.docker-data/.claude:${CONTAINER_HOME}/.claude
+      - ${WORKSPACE}/.docker-data/.claude.json:${CONTAINER_HOME}/.claude.json
+      - ${WORKSPACE}/.docker-data/.codex-data:${CONTAINER_HOME}/.codex-data
+      - ${WORKSPACE}/.docker-data/.vscode-server:${CONTAINER_HOME}/.vscode-server
