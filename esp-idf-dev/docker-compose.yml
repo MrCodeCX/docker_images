@@ -11,6 +11,7 @@ services:
     volumes:
       - /dev:/dev
       - ${WORKSPACE}:/workspace
-      - ${WORKSPACE}/.claude:/home/ubuntu/.claude
-      - ${WORKSPACE}/.claude.json:/home/ubuntu/.claude.json
-      - ${WORKSPACE}/.codex:/home/ubuntu/.codex
+      - ${WORKSPACE}/.docker-data/.claude:/home/ubuntu/.claude
+      - ${WORKSPACE}/.docker-data/.claude.json:/home/ubuntu/.claude.json
+      - ${WORKSPACE}/.docker-data/.codex:/home/ubuntu/.codex
+      - ${WORKSPACE}/.docker-data/.vscode-server:/home/ubuntu/.vscode-server

@@ -22,6 +22,13 @@ RUN sh /tmp/setup_zsh.sh && rm /tmp/setup_zsh.sh && \
     echo 'source /opt/ros/jazzy/setup.zsh' >> ~/.zshrc
 
 WORKDIR /workspace
-COPY --chown=ubuntu:ubuntu scripts/setup_ai_tools.sh /tmp/setup_ai_tools.sh
+
+ENV PATH="/home/ubuntu/.local/bin:${PATH}"
+
+# Installs claude code for the current user.
+RUN curl -fsSL https://claude.ai/install.sh | bash
+
+# Installs codex for the current user.
+RUN curl -fsSL https://chatgpt.com/codex/install.sh | CODEX_NON_INTERACTIVE=1 sh
 
 CMD ["/bin/zsh"]

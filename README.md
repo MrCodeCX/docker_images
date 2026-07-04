@@ -6,12 +6,11 @@ Development container images I use daily, each based on a common OS/runtime with
 
 | Image | Base |
 |---|---|
-| `alpine-dev` | `alpine:latest` |
 | `arch-dev` | `archlinux:latest` |
+| `esp-idf-dev` | `espressif/idf:release-v6.0` |
 | `node-dev` | `node:24` |
 | `pytorch-dev` | `pytorch/pytorch:2.9.1-cuda12.8-cudnn9-runtime` |
 | `ros-dev` | `ros:jazzy-ros-base` |
-| `ubuntu-dev` | `ubuntu:noble` |
 
 Each image includes a `setup_zsh_<base>.sh` script (see `scripts/`) that installs and configures `oh-my-zsh` with the following plugins:
 
