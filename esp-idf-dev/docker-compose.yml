@@ -8,10 +8,12 @@ services:
     stdin_open: true
     tty: true
     privileged: true
+    environment:
+      - CODEX_HOME=${CONTAINER_HOME}/.codex-data
     volumes:
       - /dev:/dev
       - ${WORKSPACE}:/workspace
-      - ${WORKSPACE}/.docker-data/.claude:/home/ubuntu/.claude
-      - ${WORKSPACE}/.docker-data/.claude.json:/home/ubuntu/.claude.json
-      - ${WORKSPACE}/.docker-data/.codex:/home/ubuntu/.codex
-      - ${WORKSPACE}/.docker-data/.vscode-server:/home/ubuntu/.vscode-server
+      - ${WORKSPACE}/.docker-data/.claude:${CONTAINER_HOME}/.claude
+      - ${WORKSPACE}/.docker-data/.claude.json:${CONTAINER_HOME}/.claude.json
+      - ${WORKSPACE}/.docker-data/.codex-data:${CONTAINER_HOME}/.codex-data
+      - ${WORKSPACE}/.docker-data/.vscode-server:${CONTAINER_HOME}/.vscode-server
