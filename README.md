@@ -9,6 +9,7 @@ Development container images I use daily, each based on a common OS/runtime with
 | `arch-dev` | `archlinux:latest` |
 | `esp-idf-dev` | `espressif/idf:release-v6.0` |
 | `node-dev` | `node:24` |
+| `pio-dev` | `python:3.12-slim` |
 | `pytorch-dev` | `pytorch/pytorch:2.9.1-cuda12.8-cudnn9-runtime` |
 | `ros-dev` | `ros:jazzy-ros-base` |
 

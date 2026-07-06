@@ -2,6 +2,7 @@ node-dev/
 esp-idf-dev/
 pytorch-dev/
 ros-dev/
+pio-dev/
 arch-dev/
 .git/
 README.md

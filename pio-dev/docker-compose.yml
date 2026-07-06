@@ -1,0 +1,19 @@
+services:
+  pio-dev:
+    build:
+      context: ..
+      dockerfile: pio-dev/Dockerfile
+    image: mrcodecx/pio-dev:latest
+    container_name: pio-dev
+    stdin_open: true
+    tty: true
+    privileged: true
+    environment:
+      - CODEX_HOME=${CONTAINER_HOME}/.codex-data
+    volumes:
+      - /dev:/dev
+      - ${WORKSPACE}:/workspace
+      - ${WORKSPACE}/.docker-data/.claude:${CONTAINER_HOME}/.claude
+      - ${WORKSPACE}/.docker-data/.claude.json:${CONTAINER_HOME}/.claude.json
+      - ${WORKSPACE}/.docker-data/.codex-data:${CONTAINER_HOME}/.codex-data
+      - ${WORKSPACE}/.docker-data/.vscode-server:${CONTAINER_HOME}/.vscode-server
