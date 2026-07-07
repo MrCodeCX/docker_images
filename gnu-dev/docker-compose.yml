@@ -1,0 +1,17 @@
+services:
+  gnu-dev:
+    build:
+      context: ..
+      dockerfile: gnu-dev/Dockerfile
+    image: mrcodecx/gnu-dev:resolute
+    container_name: gnu-dev
+    stdin_open: true
+    tty: true
+    environment:
+      - CODEX_HOME=${CONTAINER_HOME}/.codex-data
+    volumes:
+      - ${WORKSPACE}:/workspace
+      - ${WORKSPACE}/.docker-data/.claude:${CONTAINER_HOME}/.claude
+      - ${WORKSPACE}/.docker-data/.claude.json:${CONTAINER_HOME}/.claude.json
+      - ${WORKSPACE}/.docker-data/.codex-data:${CONTAINER_HOME}/.codex-data
+      - ${WORKSPACE}/.docker-data/.vscode-server:${CONTAINER_HOME}/.vscode-server
