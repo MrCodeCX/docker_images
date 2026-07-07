@@ -8,6 +8,8 @@ services:
     stdin_open: true
     tty: true
     privileged: true
+    ports:
+      - 8008:8008
     environment:
       - CODEX_HOME=${CONTAINER_HOME}/.codex-data
     volumes:
@@ -17,3 +19,4 @@ services:
       - ${WORKSPACE}/.docker-data/.claude.json:${CONTAINER_HOME}/.claude.json
       - ${WORKSPACE}/.docker-data/.codex-data:${CONTAINER_HOME}/.codex-data
       - ${WORKSPACE}/.docker-data/.vscode-server:${CONTAINER_HOME}/.vscode-server
+      - ${WORKSPACE}/.docker-data/.platformio:${CONTAINER_HOME}/.platformio

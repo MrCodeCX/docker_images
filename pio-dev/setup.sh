@@ -4,7 +4,7 @@
 
 . ./.env
 
-mkdir -p "$WORKSPACE/.docker-data/.claude" "$WORKSPACE/.docker-data/.codex-data" "$WORKSPACE/.docker-data/.vscode-server"
+mkdir -p "$WORKSPACE/.docker-data/.claude" "$WORKSPACE/.docker-data/.codex-data" "$WORKSPACE/.docker-data/.vscode-server" "$WORKSPACE/.docker-data/.platformio"
 
 if [ ! -s "$WORKSPACE/.docker-data/.claude.json" ]; then
     echo '{}' > "$WORKSPACE/.docker-data/.claude.json"
